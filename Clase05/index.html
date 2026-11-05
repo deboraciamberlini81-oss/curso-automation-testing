@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculadora web de Talento Lab">
+    <title>Calculadora | Talento Lab</title>
+
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <main class="contenedor-principal">
+
+        <section class="calculadora" aria-labelledby="titulo-calculadora">
+
+            <header class="calculadora__encabezado">
+                <h1 id="titulo-calculadora">Calculadora</h1>
+                <p class="calculadora__descripcion">
+                    Ingresá dos números y seleccioná una operación.
+                </p>
+            </header>
+
+            <form id="form-calculadora" name="form-calculadora"
+                  class="calculadora__formulario">
+
+                <div class="campo">
+                    <label for="num1">Primer número</label>
+                    <input
+                        type="number"
+                        id="num1"
+                        name="primer_numero"
+                        class="campo__input"
+                        placeholder="Ejemplo: 10"
+                        step="any"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="operacion">Operación</label>
+                    <select
+                        id="operacion"
+                        name="operacion"
+                        class="campo__select"
+                        required
+                    >
+                        <option value="">Seleccioná una operación</option>
+                        <option value="sumar">Suma (+)</option>
+                        <option value="restar">Resta (-)</option>
+                        <option value="multiplicar">Multiplicación (×)</option>
+                        <option value="dividir">División (÷)</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="num2">Segundo número</label>
+                    <input
+                        type="number"
+                        id="num2"
+                        name="segundo_numero"
+                        class="campo__input"
+                        placeholder="Ejemplo: 5"
+                        step="any"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="resultado">Resultado</label>
+                    <input
+                        type="text"
+                        id="resultado"
+                        name="resultado"
+                        class="campo__input campo__input--resultado"
+                        placeholder="El resultado aparecerá aquí"
+                        readonly
+                    >
+                </div>
+
+                <div class="calculadora__acciones">
+                    <button
+                        type="button"
+                        id="btn-calcular"
+                        name="btn_calcular"
+                        class="boton boton--principal"
+                    >
+                        Calcular
+                    </button>
+
+                    <button
+                        type="reset"
+                        id="btn-limpiar"
+                        name="btn_limpiar"
+                        class="boton boton--secundario"
+                    >
+                        Limpiar
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+</body>
+</html>
