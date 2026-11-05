@@ -1,0 +1,13 @@
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+venv/
+.venv/
+
+# Configuración de VS Code
+.vscode/
+
+# Caché de Pytest
+.pytest_cache/
