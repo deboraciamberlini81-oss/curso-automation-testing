@@ -48,7 +48,8 @@ curso-automation_testing/
 │
 ├── tests_api/
 │   ├── test_login_api.py
-│   └── test_users_api.py
+│   ├── test_users_api.py
+│   └── test_create_user_api.py
 │
 ├── utils/
 │   └── lectura_datos.py
@@ -138,6 +139,25 @@ Validaciones realizadas:
 - Presencia de los campos `id`, `email`, `first_name` y `last_name`.
 - Validación adicional: los avatares deben finalizar en `.jpg`.
 
+### Create User API – POST
+
+Endpoint:
+
+`https://reqres.in/api/users`
+
+Se implementaron pruebas parametrizadas para crear usuarios con distintos nombres y trabajos.
+
+Validaciones realizadas:
+
+- Código de respuesta HTTP 201 (Created).
+- Coincidencia del nombre enviado con el devuelto por la API.
+- Coincidencia del trabajo enviado con el devuelto por la API.
+- Existencia de un identificador (`id`).
+- Existencia del campo `createdAt`.
+- Verificación de que `createdAt` contenga el año actual.
+
+Se utilizaron datos fijos parametrizados mediante `@pytest.mark.parametrize`.
+
 ## 4. Marcadores de Pytest
 
 Se configuraron marcadores para organizar la ejecución de las pruebas:
@@ -151,7 +171,7 @@ Se configuraron marcadores para organizar la ejecución de las pruebas:
 
 ## 5. Ejecución de pruebas
 
-Ejecutar todas las pruebas (UI + API):
+Ejecutar todas las pruebas:
 
 ```bash
 python -m pytest -v
@@ -160,7 +180,7 @@ python -m pytest -v
 Ejecutar solamente las pruebas API:
 
 ```bash
-python -m pytest tests_api/ -v
+python -m pytest -m api -v
 ```
 
 Ejecutar solamente las pruebas UI con POM:
@@ -175,37 +195,45 @@ Ejecutar las pruebas Smoke:
 python -m pytest -m smoke -v
 ```
 
-Ejecutar las pruebas API por marcador:
+Ejecutar la suite completa de UI + API:
 
 ```bash
-python -m pytest -m api -v
+python -m pytest tests/ tests_api/ -v
 ```
 
-Generar un reporte HTML:
+Generar un reporte HTML combinado:
 
 ```bash
-python -m pytest -v --html=report.html --self-contained-html
+python -m pytest tests/ tests_api/ --html=reporte_completo.html --self-contained-html
 ```
 
 ## 6. Resultados de ejecución
 
 Última ejecución completa del framework:
 
-**27 pruebas aprobadas – 0 fallidas.**
+**30 pruebas aprobadas – 0 fallidas.**
 
 | Suite | Pruebas aprobadas |
 |---|---:|
 | Calculadora | 12 |
 | Selenium / UI | 12 |
-| API Testing | 3 |
-| **Total** | **27** |
+| API Testing | 6 |
+| **Total** | **30** |
 
-Tiempo de ejecución: 57.36 segundos.
+Tiempo de ejecución de la última suite completa: 60.55 segundos.
 
-Las pruebas API también se ejecutaron de manera independiente:
+### Ejecución independiente de API Testing
 
-- 3 pruebas aprobadas.
+- 6 pruebas aprobadas.
 - 0 pruebas fallidas.
+
+### Reporte HTML
+
+Se generó el reporte combinado:
+
+`reporte_completo.html`
+
+El informe permite consultar los resultados de las pruebas de interfaz y API en un único archivo.
 
 ## 7. Control de versiones
 
@@ -225,8 +253,10 @@ Este proyecto representa la integración de diferentes técnicas de automatizaci
 - Diseño con Page Object Model.
 - Pruebas basadas en datos externos.
 - Parametrización de escenarios.
-- Validación de servicios REST.
+- Validación de servicios REST mediante métodos GET y POST.
+- Pruebas de creación de usuarios y validación de respuestas HTTP.
 - Organización y ejecución de suites con Pytest.
+- Generación de reportes HTML.
 - Control de versiones con Git y GitHub.
 
 El framework constituye una base de aprendizaje y práctica profesional en **QA Automation**, con una estructura preparada para incorporar nuevas funcionalidades, validaciones y escenarios de prueba.
