@@ -1,0 +1,19 @@
+[
+    {
+        "nombre": "login_valido",
+        "payload": {
+            "email": "eve.holt@reqres.in",
+            "password": "cityslicka"
+        },
+        "status_esperado": 200,
+        "espera_token": true
+    },
+    {
+        "nombre": "login_sin_password",
+        "payload": {
+            "email": "eve.holt@reqres.in"
+        },
+        "status_esperado": 400,
+        "espera_token": false
+    }
+]
