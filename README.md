@@ -301,6 +301,102 @@ Ejecutar toda la suite:
 python -m pytest tests/ tests_api/ -v
 ```
 
-**Resultado de la suite:** 31 pruebas aprobadas.
+**Última ejecución registrada:** 25 pruebas aprobadas y 6 fallidas por límite de solicitudes HTTP 429 de ReqRes.
 
 **Nota:** JSONPlaceholder simula las operaciones de escritura. Los cambios no se almacenan de forma persistente.
+---
+
+## 8. BDD Testing – Behave y Gherkin (QA-158)
+
+Se incorporó una suite de pruebas BDD (Behavior Driven Development)
+utilizando Behave y Gherkin para describir escenarios funcionales
+en un lenguaje claro y comprensible.
+
+### Tecnologías utilizadas
+
+- Behave 1.3.3
+- Gherkin
+- Selenium WebDriver
+- Page Object Model (POM)
+- behave-html-formatter
+- Python
+
+### Estructura BDD
+
+```text
+features/
+├── login.feature
+├── cart.feature
+├── environment.py
+└── steps/
+    ├── login_steps.py
+    └── cart_steps.py
+
+  ### Escenarios implementados
+
+**Login (`login.feature`)**
+- Login exitoso con `standard_user`.
+- Login fallido con usuario inválido.
+- Login fallido con usuario bloqueado.
+- Login con campos vacíos.
+
+**Carrito (`cart.feature`)**
+- Inicio de sesión automático mediante Background.
+- Agregar Sauce Labs Backpack al carrito.
+- Verificar el contador de productos.
+- Comprobar que el producto aparece en el carrito.
+
+### Etiquetas utilizadas
+
+- `@ui`: identifica pruebas de interfaz.
+- `@smoke`: identifica el login exitoso.
+- `@regression`: identifica pruebas de regresión.
+
+### Ejecución de las pruebas BDD
+
+Ejecutar todos los escenarios:
+
+```bash
+python -m behave
+```
+
+Ejecutar solamente pruebas Smoke:
+
+```bash
+python -m behave --tags=@smoke
+```
+
+Ejecutar pruebas de regresión:
+
+```bash
+python -m behave --tags=@regression
+```
+
+Generar reporte HTML:
+
+```bash
+python -m behave --format html --outfile reports/reporte_behave.html
+```
+
+### Evidencias y reportes
+
+- Captura automática de pantalla cuando falla un escenario.
+- Reporte HTML de ejecución BDD.
+- Reportes almacenados localmente en `reports/`.
+
+### Resultado de ejecución BDD
+
+- Features: 2 aprobadas.
+- Escenarios: 5 aprobados.
+- Steps: 18 aprobados.
+- Fallos: 0.
+
+### Compatibilidad con Pytest
+
+La suite tradicional continúa funcionando desde el entorno virtual `.venv`.
+
+En la última ejecución:
+- 25 pruebas aprobadas.
+- 6 pruebas API limitadas por respuesta HTTP 429 de ReqRes (límite de solicitudes anónimas).
+
+Los fallos de ReqRes corresponden a una restricción del servicio externo y no deben interpretarse como fallos funcionales de las pruebas BDD.  
