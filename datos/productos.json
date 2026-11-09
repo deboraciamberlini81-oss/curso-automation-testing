@@ -1,0 +1,18 @@
+[
+    {
+        "nombre": "Sauce Labs Backpack",
+        "xpath": "//div[text()='Sauce Labs Backpack']/ancestor::div[@class='inventory_item']//button"
+    },
+    {
+        "nombre": "Sauce Labs Bike Light",
+        "xpath": "//div[text()='Sauce Labs Bike Light']/ancestor::div[@class='inventory_item']//button"
+    },
+    {
+        "nombre": "Sauce Labs Bolt T-Shirt",
+        "xpath": "//div[text()='Sauce Labs Bolt T-Shirt']/ancestor::div[@class='inventory_item']//button"
+    },
+    {
+        "nombre": "Sauce Labs Fleece Jacket",
+        "xpath": "//div[text()='Sauce Labs Fleece Jacket']/ancestor::div[@class='inventory_item']//button"
+    }
+]

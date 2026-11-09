@@ -4,13 +4,19 @@ from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 
+from utils.lectura_datos import leer_json
+
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+productos = leer_json("productos.json")
+
+
 @pytest.mark.pom
 @pytest.mark.smoke
-def test_agregar_producto_al_carrito(driver):
+@pytest.mark.parametrize("datos_producto", productos)
+def test_agregar_producto_al_carrito(driver, datos_producto):
 
     login = LoginPage(driver)
     inventario = InventoryPage(driver)
@@ -23,9 +29,7 @@ def test_agregar_producto_al_carrito(driver):
         EC.url_contains("/inventory.html")
     )
 
-    nombre_producto = inventario.obtener_nombre_primer_producto()
-
-    inventario.agregar_primer_producto()
+    inventario.agregar_producto_por_xpath(datos_producto["xpath"])
 
     assert inventario.obtener_contador_carrito() == "1"
 
@@ -35,4 +39,4 @@ def test_agregar_producto_al_carrito(driver):
         EC.url_contains("/cart.html")
     )
 
-    assert carrito.contiene_producto(nombre_producto)
+    assert carrito.contiene_producto(datos_producto["nombre"])

@@ -1,10 +1,10 @@
-# Proyecto de Automatización QA – Page Object Model (POM)
+﻿# Proyecto de Automatización QA – Page Object Model (POM)
 
 ## Descripción
 
-Proyecto de automatización de pruebas funcionales desarrollado con **Python, Selenium WebDriver y Pytest**, aplicando el patrón de diseño **Page Object Model (POM)**.
+Proyecto de automatización de pruebas funcionales desarrollado con **Python, Selenium WebDriver y Pytest**, aplicando el patrón de diseño **Page Object Model (POM)** y la lectura de datos externos mediante archivos CSV y JSON.
 
-El objetivo es automatizar los principales flujos de navegación de la aplicación SauceDemo, mejorar la organización del código y facilitar su mantenimiento y reutilización.
+El objetivo es automatizar los principales flujos de navegación de la aplicación SauceDemo, mejorar la organización del código y facilitar el mantenimiento, la reutilización y la ampliación de los casos de prueba.
 
 ## Tecnologías utilizadas
 
@@ -13,12 +13,18 @@ El objetivo es automatizar los principales flujos de navegación de la aplicaci�
 - Pytest 7.4.4
 - Pytest-HTML 4.2.0
 - Page Object Model (POM)
+- Parametrización con Pytest
+- Lectura de archivos CSV y JSON
 - Google Chrome
 
 ## Estructura del proyecto
 
 ```text
 curso-automation_testing/
+│
+├── datos/
+│   ├── login.csv
+│   └── productos.json
 │
 ├── pages/
 │   ├── __init__.py
@@ -33,6 +39,9 @@ curso-automation_testing/
 │   ├── test_carrito.py
 │   └── test_calculadora.py
 │
+├── utils/
+│   └── lectura_datos.py
+│
 ├── Clase05/
 ├── Clase06/
 ├── Clase07/
@@ -43,21 +52,41 @@ curso-automation_testing/
 └── README.md
 ```
 
-## Patrón Page Object Model
+## Patrón Page Object Model (POM)
 
 Se implementó POM para separar los localizadores y las acciones de cada página de los casos de prueba.
 
-- **LoginPage:** apertura de la aplicación e inicio de sesión.
-- **InventoryPage:** consulta del catálogo, productos, precios y carrito.
-- **CartPage:** consulta y validación de productos agregados al carrito.
+- **LoginPage:** apertura de la aplicación, inicio de sesión y lectura de mensajes de error.
+- **InventoryPage:** consulta del catálogo, productos, precios y agregado de productos al carrito.
+- **CartPage:** consulta y validación de los productos agregados al carrito.
 
-## Casos de prueba automatizados
+## Lectura de datos externos
 
-| Archivo | Validación |
-|---|---|
-| `test_login.py` | Inicio de sesión exitoso |
-| `test_catalogo.py` | Visualización del catálogo y productos |
-| `test_carrito.py` | Agregado y verificación de productos en el carrito |
+Se creó el módulo `utils/lectura_datos.py` para centralizar la lectura de archivos externos.
+
+### Archivo CSV: login.csv
+
+Contiene diferentes combinaciones de usuarios y contraseñas para validar:
+
+- Inicio de sesión exitoso.
+- Usuario bloqueado.
+- Credenciales incorrectas.
+- Usuario inexistente.
+
+### Archivo JSON: productos.json
+
+Contiene los nombres de los productos y sus XPath correspondientes para automatizar su agregado al carrito.
+
+## Parametrización de pruebas
+
+Se utilizó `@pytest.mark.parametrize` para ejecutar los casos de prueba con diferentes conjuntos de datos sin duplicar código.
+
+| Archivo | Datos externos | Casos ejecutados |
+|---|---|---:|
+| `test_login.py` | `login.csv` | 6 |
+| `test_carrito.py` | `productos.json` | 4 |
+| `test_catalogo.py` | — | 1 |
+| **Total POM** | | **11** |
 
 ## Fixture de WebDriver
 
@@ -88,29 +117,27 @@ Ejecutar las pruebas Smoke:
 python -m pytest -m smoke -v
 ```
 
-Generar el reporte HTML solicitado:
+Generar el reporte HTML:
 
 ```bash
 python -m pytest -m smoke --html=preentrega_pom.html --self-contained-html
 ```
 
-## Reporte de ejecución
+## Resultados de ejecución
 
-El proyecto genera un reporte HTML con el detalle de los resultados de ejecución.
+Última validación del módulo POM:
 
-Archivo: `preentrega_pom.html`
+- 11 pruebas aprobadas.
+- 12 pruebas deseleccionadas.
+- 0 pruebas fallidas.
 
-Última ejecución de Smoke:
+Validación de los datos externos:
 
-- 7 pruebas aprobadas.
-- 8 pruebas deseleccionadas.
-
-Pruebas POM:
-
-- 3 pruebas aprobadas.
+- 6 casos de inicio de sesión ejecutados desde CSV.
+- 4 casos de agregado de productos ejecutados desde JSON.
 
 ## Conclusión
 
-La implementación del patrón Page Object Model permite mejorar la legibilidad, organización y mantenibilidad de las pruebas automatizadas.
+La implementación de Page Object Model, junto con la lectura de datos externos y la parametrización de Pytest, permite desarrollar pruebas automatizadas más organizadas, reutilizables y fáciles de mantener.
 
-Este proyecto forma parte del proceso de aprendizaje y desarrollo de habilidades en **QA Automation**, utilizando herramientas y buenas prácticas de automatización de pruebas.
+Este proyecto forma parte del proceso de aprendizaje y desarrollo de habilidades en **QA Automation**, aplicando buenas prácticas de automatización de pruebas funcionales.
