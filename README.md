@@ -260,3 +260,47 @@ Este proyecto representa la integración de diferentes técnicas de automatizaci
 - Control de versiones con Git y GitHub.
 
 El framework constituye una base de aprendizaje y práctica profesional en **QA Automation**, con una estructura preparada para incorporar nuevas funcionalidades, validaciones y escenarios de prueba.
+## QA-132 – Ciclo de vida de un recurso API
+
+Se implementó una prueba End-to-End (E2E) para validar el ciclo de vida completo de un recurso mediante la API de JSONPlaceholder.
+
+### Operaciones verificadas
+
+1. **POST – Crear recurso:** generación de datos dinámicos mediante Faker y creación de un nuevo post.
+2. **PATCH – Actualizar recurso:** modificación del título a `Título actualizado por QA`.
+3. **DELETE – Eliminar recurso:** solicitud de eliminación y validación del código HTTP 200.
+
+### Validaciones implementadas
+
+- Códigos de respuesta HTTP.
+- Estructura de los datos JSON.
+- Tipos de datos y contenido de los campos.
+- Identificación del recurso mediante su ID.
+- Tiempo de respuesta de cada operación.
+- Marcador personalizado `@pytest.mark.e2e`.
+
+### Tecnologías utilizadas
+
+- Python
+- Pytest
+- Requests
+- Faker
+- JSONPlaceholder API
+
+### Ejecución de la prueba
+
+Ejecutar únicamente el test E2E:
+
+```bash
+python -m pytest -m e2e -v -s
+```
+
+Ejecutar toda la suite:
+
+```bash
+python -m pytest tests/ tests_api/ -v
+```
+
+**Resultado de la suite:** 31 pruebas aprobadas.
+
+**Nota:** JSONPlaceholder simula las operaciones de escritura. Los cambios no se almacenan de forma persistente.
