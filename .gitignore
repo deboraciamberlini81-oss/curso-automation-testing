@@ -16,3 +16,5 @@ venv/
 reports/*.html
 reports/*.png
 logs/*.log
+# Capturas de pantalla de Behave
+reports/screens/*.png
