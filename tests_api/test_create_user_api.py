@@ -1,8 +1,11 @@
+
+import os
 import pytest
 import requests
 from datetime import datetime
 
 BASE_URL = "https://reqres.in/api"
+API_KEY = os.getenv("REQRES_API_KEY")
 
 CASOS_CREAR_USUARIO = [
     pytest.param("Ana QA", "QA Automation Trainee", id="usuario-qa"),
@@ -15,6 +18,8 @@ CASOS_CREAR_USUARIO = [
 @pytest.mark.parametrize("nombre, trabajo", CASOS_CREAR_USUARIO)
 def test_crear_usuario_api(nombre, trabajo):
 
+    assert API_KEY, "Falta configurar la variable REQRES_API_KEY"
+
     payload = {
         "name": nombre,
         "job": trabajo
@@ -23,6 +28,7 @@ def test_crear_usuario_api(nombre, trabajo):
     response = requests.post(
         f"{BASE_URL}/users",
         json=payload,
+        headers={"x-api-key": API_KEY},
         timeout=10
     )
 

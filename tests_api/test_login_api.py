@@ -1,3 +1,5 @@
+
+import os
 import pytest
 import requests
 
@@ -5,6 +7,7 @@ from utils.lectura_datos import leer_json
 
 
 BASE_URL = "https://reqres.in/api"
+API_KEY = os.getenv("REQRES_API_KEY")
 
 CASOS_LOGIN = leer_json("login_api.json")
 
@@ -13,9 +16,12 @@ CASOS_LOGIN = leer_json("login_api.json")
 @pytest.mark.parametrize("caso", CASOS_LOGIN)
 def test_login_api(caso):
 
+    assert API_KEY, "Falta configurar la variable REQRES_API_KEY"
+
     response = requests.post(
         f"{BASE_URL}/login",
         json=caso["payload"],
+        headers={"x-api-key": API_KEY},
         timeout=10
     )
 

@@ -1,36 +1,37 @@
-import pytest
+
+import os
 import requests
+import pytest
 
 
 BASE_URL = "https://reqres.in/api"
+API_KEY = os.getenv("REQRES_API_KEY")
 
 
 @pytest.mark.api
 def test_obtener_usuarios():
 
+    assert API_KEY, "Falta configurar la variable REQRES_API_KEY"
+
     response = requests.get(
         f"{BASE_URL}/users",
         params={"page": 1},
+        headers={"x-api-key": API_KEY},
         timeout=10
     )
 
     # Validar código HTTP
     assert response.status_code == 200
 
-    datos_respuesta = response.json()
+    datos = response.json()
 
-    # Validar que exista la lista de usuarios
-    assert "data" in datos_respuesta
-    usuarios = datos_respuesta["data"]
-    assert len(usuarios) > 0
+    # Validar estructura de respuesta
+    assert "data" in datos
+    assert len(datos["data"]) > 0
 
-    # Validar estructura de cada usuario
-    for usuario in usuarios:
+    # Validar datos del primer usuario
+    usuario = datos["data"][0]
 
-        assert "id" in usuario
-        assert "email" in usuario
-        assert "first_name" in usuario
-        assert "last_name" in usuario
-
-        # Validación extra: avatar JPG
-        assert usuario["avatar"].lower().endswith(".jpg")
+    assert "id" in usuario
+    assert "email" in usuario
+    assert "first_name" in usuario

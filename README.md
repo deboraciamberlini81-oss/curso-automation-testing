@@ -1,37 +1,54 @@
 ﻿# QA Automation Framework – Python, Selenium & API Testing
 
+![CI TalentoLab](https://github.com/deboraciamberlini81-oss/curso-automation-testing/actions/workflows/ci.yml/badge.svg)
+
+**Proyecto de automatización de pruebas QA** que integra pruebas funcionales UI, API Testing y BDD, utilizando Python, Selenium WebDriver, Pytest, Requests y Behave.
+
 ## Descripción
 
-Proyecto de automatización de pruebas desarrollado con **Python, Selenium WebDriver, Pytest y Requests**, aplicando buenas prácticas de QA Automation.
+Framework de automatización desarrollado como proyecto de aprendizaje y práctica profesional de QA Automation.
 
-El framework integra pruebas funcionales de interfaz de usuario (UI Testing) y pruebas de servicios REST (API Testing), utilizando el patrón de diseño **Page Object Model (POM)**, parametrización y lectura de datos externos mediante archivos CSV y JSON.
+El proyecto integra:
 
-El objetivo es validar los principales flujos de una aplicación web, verificar respuestas de servicios API y desarrollar una estructura organizada, reutilizable y escalable.
+- Automatización funcional de interfaces web.
+- Diseño Page Object Model (POM).
+- Data-Driven Testing mediante archivos CSV y JSON.
+- Parametrización de pruebas con Pytest.
+- Validación de servicios REST.
+- Pruebas End-to-End de ciclo de vida API.
+- BDD con Behave y Gherkin.
+- Generación de reportes HTML.
+- Integración continua mediante GitHub Actions.
 
 ## Tecnologías utilizadas
 
-- Python 3.12
-- Selenium WebDriver 4.50.0
-- Pytest 7.4.4
-- Pytest-HTML 4.2.0
-- Requests 2.32.2
-- Page Object Model (POM)
-- Data-Driven Testing
-- Parametrización con Pytest
-- Lectura de archivos CSV y JSON
-- API Testing (GET y POST)
-- Google Chrome
-- Git y GitHub
+| Tecnología | Aplicación |
+|---|---|
+| Python 3.12 | Lenguaje de programación |
+| Selenium WebDriver 4.50.0 | Automatización UI |
+| Pytest 7.4.4 | Framework de pruebas |
+| Pytest-HTML 4.2.0 | Reportes HTML |
+| Requests | API Testing |
+| Behave 1.3.3 | BDD |
+| Gherkin | Descripción de escenarios |
+| Faker | Generación de datos dinámicos |
+| Google Chrome | Navegador de pruebas |
+| Git y GitHub | Control de versiones |
+| GitHub Actions | Integración continua |
 
 ## Estructura del proyecto
 
 ```text
 curso-automation_testing/
 │
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
 ├── datos/
 │   ├── login.csv
-│   ├── productos.json
-│   └── login_api.json
+│   ├── login_api.json
+│   └── productos.json
 │
 ├── pages/
 │   ├── __init__.py
@@ -49,18 +66,34 @@ curso-automation_testing/
 ├── tests_api/
 │   ├── test_login_api.py
 │   ├── test_users_api.py
-│   └── test_create_user_api.py
+│   ├── test_create_user_api.py
+│   └── test_post_lifecycle.py
+│
+├── tests_behave/
+│   └── test_behave_suite.py
+│
+├── features/
+│   ├── login.feature
+│   ├── cart.feature
+│   ├── environment.py
+│   └── steps/
+│       ├── login_steps.py
+│       └── cart_steps.py
 │
 ├── utils/
 │   └── lectura_datos.py
 │
+├── reports/
+├── logs/
+├── assets/
+├── calculadora/
 ├── Clase05/
 ├── Clase06/
 ├── Clase07/
-├── calculadora/
-├── assets/
 │
+├── behave.ini
 ├── pytest.ini
+├── requirements.txt
 ├── README.md
 └── .gitignore
 ```
@@ -88,7 +121,7 @@ Se configuró una fixture `driver` en `tests/conftest.py`, responsable de:
 
 ## 2. Data-Driven Testing – Datos externos
 
-Se creó el módulo `utils/lectura_datos.py` para centralizar la lectura de archivos CSV y JSON.
+Se implementó el módulo `utils/lectura_datos.py` para centralizar la lectura de archivos CSV y JSON.
 
 ### Archivo CSV: login.csv
 
@@ -101,7 +134,7 @@ Contiene diferentes combinaciones de usuarios y contraseñas para validar:
 
 ### Archivo JSON: productos.json
 
-Contiene los nombres de los productos y sus XPath correspondientes para automatizar su agregado al carrito.
+Contiene información de productos y sus localizadores para automatizar su agregado al carrito.
 
 ### Parametrización
 
@@ -121,10 +154,10 @@ Escenarios implementados:
 
 | Escenario | Resultado esperado |
 |---|---|
-| Login con credenciales válidas | HTTP 200 + token |
-| Login sin contraseña | HTTP 400 + error |
+| Login con credenciales válidas | HTTP 200 y token |
+| Login sin contraseña | HTTP 400 y error |
 
-Los escenarios se cargan desde `datos/login_api.json` y se ejecutan mediante parametrización con Pytest.
+Los escenarios utilizan datos externos de `datos/login_api.json` y parametrización con Pytest.
 
 ### Users API – GET
 
@@ -134,10 +167,10 @@ Endpoint:
 
 Validaciones realizadas:
 
-- Código de respuesta HTTP 200.
+- Código HTTP 200.
 - Existencia de la lista de usuarios.
 - Presencia de los campos `id`, `email`, `first_name` y `last_name`.
-- Validación adicional: los avatares deben finalizar en `.jpg`.
+- Validación de que los avatares finalicen en `.jpg`.
 
 ### Create User API – POST
 
@@ -147,212 +180,74 @@ Endpoint:
 
 Se implementaron pruebas parametrizadas para crear usuarios con distintos nombres y trabajos.
 
-Validaciones realizadas:
+Validaciones:
 
-- Código de respuesta HTTP 201 (Created).
-- Coincidencia del nombre enviado con el devuelto por la API.
-- Coincidencia del trabajo enviado con el devuelto por la API.
+- Código HTTP 201 (Created).
+- Coincidencia del nombre enviado con el devuelto.
+- Coincidencia del trabajo enviado con el devuelto.
 - Existencia de un identificador (`id`).
 - Existencia del campo `createdAt`.
-- Verificación de que `createdAt` contenga el año actual.
+- Validación del año de creación.
 
-Se utilizaron datos fijos parametrizados mediante `@pytest.mark.parametrize`.
+## 4. QA-132 – Ciclo de vida de un recurso API
 
-## 4. Marcadores de Pytest
-
-Se configuraron marcadores para organizar la ejecución de las pruebas:
-
-| Marcador | Descripción |
-|---|---|
-| `smoke` | Pruebas principales de la aplicación |
-| `pom` | Pruebas con Page Object Model |
-| `exception` | Manejo de excepciones |
-| `api` | Pruebas de servicios REST |
-
-## 5. Ejecución de pruebas
-
-Ejecutar todas las pruebas:
-
-```bash
-python -m pytest -v
-```
-
-Ejecutar solamente las pruebas API:
-
-```bash
-python -m pytest -m api -v
-```
-
-Ejecutar solamente las pruebas UI con POM:
-
-```bash
-python -m pytest -m pom -v
-```
-
-Ejecutar las pruebas Smoke:
-
-```bash
-python -m pytest -m smoke -v
-```
-
-Ejecutar la suite completa de UI + API:
-
-```bash
-python -m pytest tests/ tests_api/ -v
-```
-
-Generar un reporte HTML combinado:
-
-```bash
-python -m pytest tests/ tests_api/ --html=reporte_completo.html --self-contained-html
-```
-
-## 6. Resultados de ejecución
-
-Última ejecución completa del framework:
-
-**30 pruebas aprobadas – 0 fallidas.**
-
-| Suite | Pruebas aprobadas |
-|---|---:|
-| Calculadora | 12 |
-| Selenium / UI | 12 |
-| API Testing | 6 |
-| **Total** | **30** |
-
-Tiempo de ejecución de la última suite completa: 60.55 segundos.
-
-### Ejecución independiente de API Testing
-
-- 6 pruebas aprobadas.
-- 0 pruebas fallidas.
-
-### Reporte HTML
-
-Se generó el reporte combinado:
-
-`reporte_completo.html`
-
-El informe permite consultar los resultados de las pruebas de interfaz y API en un único archivo.
-
-## 7. Control de versiones
-
-El proyecto utiliza Git y GitHub para el control de versiones.
-
-Se trabaja mediante ramas de funcionalidades para organizar los cambios y mantener un historial de desarrollo.
-
-Repositorio:
-
-[curso-automation-testing](https://github.com/deboraciamberlini81-oss/curso-automation-testing)
-
-## Conclusión
-
-Este proyecto representa la integración de diferentes técnicas de automatización de pruebas:
-
-- Automatización funcional de interfaces web.
-- Diseño con Page Object Model.
-- Pruebas basadas en datos externos.
-- Parametrización de escenarios.
-- Validación de servicios REST mediante métodos GET y POST.
-- Pruebas de creación de usuarios y validación de respuestas HTTP.
-- Organización y ejecución de suites con Pytest.
-- Generación de reportes HTML.
-- Control de versiones con Git y GitHub.
-
-El framework constituye una base de aprendizaje y práctica profesional en **QA Automation**, con una estructura preparada para incorporar nuevas funcionalidades, validaciones y escenarios de prueba.
-## QA-132 – Ciclo de vida de un recurso API
-
-Se implementó una prueba End-to-End (E2E) para validar el ciclo de vida completo de un recurso mediante la API de JSONPlaceholder.
+Se implementó una prueba End-to-End (E2E) utilizando JSONPlaceholder.
 
 ### Operaciones verificadas
 
-1. **POST – Crear recurso:** generación de datos dinámicos mediante Faker y creación de un nuevo post.
-2. **PATCH – Actualizar recurso:** modificación del título a `Título actualizado por QA`.
-3. **DELETE – Eliminar recurso:** solicitud de eliminación y validación del código HTTP 200.
+1. **POST:** creación de un recurso mediante datos dinámicos generados con Faker.
+2. **PATCH:** actualización del título del recurso.
+3. **DELETE:** eliminación simulada y validación del código HTTP 200.
 
 ### Validaciones implementadas
 
 - Códigos de respuesta HTTP.
-- Estructura de los datos JSON.
-- Tipos de datos y contenido de los campos.
-- Identificación del recurso mediante su ID.
-- Tiempo de respuesta de cada operación.
+- Estructura de datos JSON.
+- Tipos de datos y contenido de campos.
+- Identificación mediante ID.
+- Tiempo de respuesta.
 - Marcador personalizado `@pytest.mark.e2e`.
 
-### Tecnologías utilizadas
-
-- Python
-- Pytest
-- Requests
-- Faker
-- JSONPlaceholder API
-
-### Ejecución de la prueba
-
-Ejecutar únicamente el test E2E:
-
-```bash
-python -m pytest -m e2e -v -s
-```
-
-Ejecutar toda la suite:
-
-```bash
-python -m pytest tests/ tests_api/ -v
-```
-
-**Última ejecución registrada:** 25 pruebas aprobadas y 6 fallidas por límite de solicitudes HTTP 429 de ReqRes.
-
 **Nota:** JSONPlaceholder simula las operaciones de escritura. Los cambios no se almacenan de forma persistente.
----
 
-## 8. BDD Testing – Behave y Gherkin (QA-158)
+## 5. BDD Testing – Behave y Gherkin (QA-158)
 
-Se incorporó una suite de pruebas BDD (Behavior Driven Development)
-utilizando Behave y Gherkin para describir escenarios funcionales
-en un lenguaje claro y comprensible.
+Se incorporó una suite BDD (Behavior Driven Development) utilizando Behave y Gherkin para describir escenarios funcionales en un lenguaje claro.
 
-### Tecnologías utilizadas
+### Features implementadas
 
-- Behave 1.3.3
-- Gherkin
-- Selenium WebDriver
-- Page Object Model (POM)
-- behave-html-formatter
-- Python
+**Login (`features/login.feature`)**
 
-### Estructura BDD
-
-```text
-features/
-├── login.feature
-├── cart.feature
-├── environment.py
-└── steps/
-    ├── login_steps.py
-    └── cart_steps.py
-
-  ### Escenarios implementados
-
-**Login (`login.feature`)**
 - Login exitoso con `standard_user`.
 - Login fallido con usuario inválido.
 - Login fallido con usuario bloqueado.
 - Login con campos vacíos.
 
-**Carrito (`cart.feature`)**
-- Inicio de sesión automático mediante Background.
+**Carrito (`features/cart.feature`)**
+
+- Inicio de sesión mediante Background.
 - Agregar Sauce Labs Backpack al carrito.
 - Verificar el contador de productos.
 - Comprobar que el producto aparece en el carrito.
 
-### Etiquetas utilizadas
+### Estructura BDD
 
-- `@ui`: identifica pruebas de interfaz.
-- `@smoke`: identifica el login exitoso.
-- `@regression`: identifica pruebas de regresión.
+- `features/login.feature`
+- `features/cart.feature`
+- `features/environment.py`
+- `features/steps/login_steps.py`
+- `features/steps/cart_steps.py`
 
-### Ejecución de las pruebas BDD
+### Configuración
+
+Se utiliza `behave.ini` para configurar:
+
+- Directorio de features.
+- Idioma Gherkin.
+- Etiquetas predeterminadas.
+- Formatter HTML mediante `behave-html-formatter`.
+
+### Ejecución
 
 Ejecutar todos los escenarios:
 
@@ -360,13 +255,13 @@ Ejecutar todos los escenarios:
 python -m behave
 ```
 
-Ejecutar solamente pruebas Smoke:
+Ejecutar solamente Smoke:
 
 ```bash
 python -m behave --tags=@smoke
 ```
 
-Ejecutar pruebas de regresión:
+Ejecutar regresión:
 
 ```bash
 python -m behave --tags=@regression
@@ -378,25 +273,185 @@ Generar reporte HTML:
 python -m behave --format html --outfile reports/reporte_behave.html
 ```
 
-### Evidencias y reportes
+La ejecución verificada registró:
 
-- Captura automática de pantalla cuando falla un escenario.
-- Reporte HTML de ejecución BDD.
-- Reportes almacenados localmente en `reports/`.
+- 2 features aprobadas.
+- 5 escenarios aprobados.
+- 18 steps aprobados.
+- 0 fallos.
 
-### Resultado de ejecución BDD
+El reporte generado se almacena en `reports/reporte_behave.html`.
 
-- Features: 2 aprobadas.
-- Escenarios: 5 aprobados.
-- Steps: 18 aprobados.
-- Fallos: 0.
+## 6. Marcadores de Pytest
 
-### Compatibilidad con Pytest
+Se configuraron marcadores personalizados para organizar las pruebas:
 
-La suite tradicional continúa funcionando desde el entorno virtual `.venv`.
+| Marcador | Descripción |
+|---|---|
+| `smoke` | Pruebas principales de la aplicación |
+| `pom` | Automatización con Page Object Model |
+| `exception` | Manejo de excepciones |
+| `api` | Pruebas de servicios REST |
+| `e2e` | Pruebas End-to-End de API |
+| `bdd` | Pruebas BDD ejecutadas mediante Behave |
+| `regression` | Pruebas de regresión funcional |
 
-En la última ejecución:
-- 25 pruebas aprobadas.
-- 6 pruebas API limitadas por respuesta HTTP 429 de ReqRes (límite de solicitudes anónimas).
+## 7. Ejecución de pruebas
 
-Los fallos de ReqRes corresponden a una restricción del servicio externo y no deben interpretarse como fallos funcionales de las pruebas BDD.  
+Ejecutar la suite completa:
+
+```bash
+python -m pytest -v
+```
+
+Ejecutar solamente API:
+
+```bash
+python -m pytest -m api -v
+```
+
+Ejecutar pruebas POM:
+
+```bash
+python -m pytest -m pom -v
+```
+
+Ejecutar Smoke:
+
+```bash
+python -m pytest -m smoke -v
+```
+
+Ejecutar pruebas E2E:
+
+```bash
+python -m pytest -m e2e -v
+```
+
+Ejecutar BDD mediante sus wrappers de Pytest:
+
+```bash
+python -m pytest tests_behave/ -v
+```
+
+Ejecutar UI y API:
+
+```bash
+python -m pytest tests/ tests_api/ -v
+```
+
+Generar reporte HTML de la suite completa:
+
+```bash
+python -m pytest -v --html=reports/reporte_completo.html --self-contained-html
+```
+
+El archivo `pytest.ini` también configura la generación automática del reporte `reports/reporte.html`.
+
+## 8. Configuración segura de API Key
+
+Reqres requiere una API Key para acceder a sus endpoints protegidos.
+
+La clave se configura mediante una variable de entorno para evitar exponer credenciales en el código fuente.
+
+### Windows PowerShell
+
+```powershell
+$env:REQRES_API_KEY="TU_API_KEY"
+```
+
+### GitHub Actions
+
+En el repositorio se configura un secreto llamado:
+
+`REQRES_API_KEY`
+
+El workflow lo utiliza mediante:
+
+```yaml
+env:
+  CI: "true"
+  REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+```
+
+**Importante:** nunca publicar la API Key en el repositorio, README, capturas o archivos de configuración versionados.
+
+## 9. Integración continua – GitHub Actions
+
+Se configuró un workflow en:
+
+`.github/workflows/ci.yml`
+
+El pipeline contempla:
+
+1. Descarga del repositorio.
+2. Configuración de Python 3.12.
+3. Preparación de directorios de reportes y logs.
+4. Instalación de dependencias.
+5. Verificación de dependencias con `pip check`.
+6. Ejecución de la suite completa UI, API y BDD mediante Pytest.
+7. Almacenamiento de reportes y logs como artefactos.
+
+El workflow se ejecuta ante eventos `push`, `pull_request` y mediante ejecución manual (`workflow_dispatch`).
+
+## 10. Resultados de ejecución
+
+Última ejecución completa local verificada:
+
+**35 pruebas aprobadas – 0 fallidas.**
+
+| Suite | Pruebas aprobadas |
+|---|---:|
+| Calculadora | 12 |
+| Selenium / UI | 12 |
+| API Testing | 7 |
+| BDD / Behave mediante Pytest | 4 |
+| **Total** | **35** |
+
+La suite API comprende 6 pruebas sobre Reqres y 1 prueba E2E sobre JSONPlaceholder.
+
+### Reportes y evidencias
+
+Los archivos de resultados se almacenan en `reports/`:
+
+- `reporte.html`: reporte automático generado por Pytest.
+- `reporte_behave.html`: reporte HTML generado mediante Behave.
+- `reporte_behave_directo.html`: reporte de una ejecución directa de Behave.
+- `behave.json`: resultados de ejecución BDD.
+- `screens/`: capturas de pantalla de escenarios fallidos.
+
+También se puede generar un reporte adicional de la suite completa ejecutando:
+
+```bash
+python -m pytest -v --html=reports/reporte_completo.html --self-contained-html
+```
+
+Los registros de ejecución se almacenan en `logs/`.
+
+## 11. Control de versiones
+
+El proyecto utiliza Git y GitHub para el control de versiones.
+
+Se trabaja mediante ramas de funcionalidades para organizar los cambios y mantener un historial de desarrollo.
+
+Repositorio:
+
+[curso-automation-testing](https://github.com/deboraciamberlini81-oss/curso-automation-testing)
+
+## Conclusión
+
+Este framework representa la integración de diferentes técnicas de automatización de pruebas:
+
+- Automatización funcional de interfaces web.
+- Diseño con Page Object Model.
+- Pruebas basadas en datos externos.
+- Parametrización de escenarios.
+- Validación de servicios REST mediante Requests.
+- Pruebas de ciclo de vida de recursos API.
+- BDD con Behave y Gherkin.
+- Organización y ejecución de suites con Pytest.
+- Generación de reportes HTML y evidencias.
+- Integración continua con GitHub Actions.
+- Control de versiones con Git y GitHub.
+
+El proyecto constituye una base de aprendizaje y práctica profesional en **QA Automation**, con una estructura organizada y preparada para incorporar nuevas funcionalidades, validaciones y escenarios de prueba.

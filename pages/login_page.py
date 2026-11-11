@@ -22,12 +22,32 @@ class LoginPage:
         self.driver.get(self.URL)
 
     def iniciar_sesion(self, usuario, password):
-        self.driver.find_element(*self.INPUT_USUARIO).send_keys(usuario)
-        self.driver.find_element(*self.INPUT_PASSWORD).send_keys(password)
-        self.driver.find_element(*self.BOTON_LOGIN).click()
+
+        campo_usuario = self.wait.until(
+            EC.element_to_be_clickable(self.INPUT_USUARIO)
+        )
+        campo_usuario.clear()
+
+        if usuario:
+            campo_usuario.send_keys(usuario)
+
+        campo_password = self.wait.until(
+            EC.element_to_be_clickable(self.INPUT_PASSWORD)
+        )
+        campo_password.clear()
+
+        if password:
+            campo_password.send_keys(password)
+
+        boton = self.wait.until(
+            EC.element_to_be_clickable(self.BOTON_LOGIN)
+        )
+        boton.click()
 
     def obtener_mensaje_error(self):
+
         mensaje = self.wait.until(
             EC.visibility_of_element_located(self.MENSAJE_ERROR)
         )
+
         return mensaje.text

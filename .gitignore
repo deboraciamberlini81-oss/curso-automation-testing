@@ -14,6 +14,7 @@ venv/
 
 # Reportes y registros generados
 reports/*.html
+reports/*.json
 reports/*.png
 logs/*.log
 # Capturas de pantalla de Behave
