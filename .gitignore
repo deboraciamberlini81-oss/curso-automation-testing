@@ -11,3 +11,11 @@ venv/
 
 # Caché de Pytest
 .pytest_cache/
+
+# Reportes y registros generados
+reports/*.html
+reports/*.json
+reports/*.png
+logs/*.log
+# Capturas de pantalla de Behave
+reports/screens/*.png

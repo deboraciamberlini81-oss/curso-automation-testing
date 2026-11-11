@@ -1,0 +1,62 @@
+
+name: CI TalentoLab
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa-tests:
+    name: Ejecutar pruebas QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CI: "true"
+      REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Preparar directorios
+        run: |
+          mkdir -p reports/screens
+          mkdir -p logs
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Verificar dependencias
+        run: python -m pip check
+
+      - name: Ejecutar suite completa UI + API + BDD
+        run: |
+          set -o pipefail
+          python -m pytest -v 2>&1 | tee logs/pytest.log
+
+      - name: Guardar reportes y logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-logs-talento-lab
+          path: |
+            reports/
+            logs/
+          retention-days: 90
+          if-no-files-found: warn

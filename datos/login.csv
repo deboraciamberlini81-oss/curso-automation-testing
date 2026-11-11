@@ -1,0 +1,7 @@
+usuario,password,resultado_esperado
+standard_user,secret_sauce,exitoso
+locked_out_user,secret_sauce,bloqueado
+problem_user,secret_sauce,exitoso
+performance_glitch_user,secret_sauce,exitoso
+standard_user,incorrect_password,error
+usuario_inexistente,secret_sauce,error

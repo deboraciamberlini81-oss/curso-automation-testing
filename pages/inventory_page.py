@@ -43,6 +43,12 @@ class InventoryPage:
     def agregar_primer_producto(self):
         producto = self.obtener_productos()[0]
         producto.find_element(*self.BOTON_AGREGAR).click()
+        
+    def agregar_producto_por_xpath(self, xpath):
+        boton = self.wait.until(
+        EC.element_to_be_clickable((By.XPATH, xpath))
+        )
+        boton.click()
 
     def obtener_contador_carrito(self):
         contador = self.wait.until(
